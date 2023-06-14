@@ -274,7 +274,7 @@ async function run() {
     //   res.send(result);
     // });
 
-    app.post("/mySelectedClasses", verifyJWT, async (req, res) => {
+    app.post("/mySelectedClasses", async (req, res) => {
       const newItem = req.body;
       const result = await bookMarkCollection.insertOne(newItem);
       res.send(result);
