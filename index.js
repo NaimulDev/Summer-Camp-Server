@@ -4,8 +4,8 @@ const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 const jwt = require("jsonwebtoken");
-
 const port = process.env.PORT || 5000;
+
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.USER}:${process.env.SECRET_KEY}@cluster0.gflxnku.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -168,28 +168,6 @@ async function run() {
 
     // ----------------------------------STUDENTS START----------------------------------
 
-    // app.post("/enrolled-students", verifyJWT, async (req, res) => {
-    //   const newItem = req.body;
-    //   const result = await enrolledStudentsCollection.insertOne(newItem);
-    //   res.send(result);
-    // });
-
-    // app.get("/enrolledStudents/:email", verifyJWT, async (req, res) => {
-    //   const email = req.params.email;
-    //   if (!email) {
-    //     res.send([]);
-    //   }
-    //   const decodedEmail = req.decoded.email;
-    //   if (email !== decodedEmail) {
-    //     return res
-    //       .status(403)
-    //       .send({ error: true, message: "forbidden access" });
-    //   }
-    //   const query = { email: email };
-    //   const result = await enrolledStudentsCollection.find(query).toArray();
-    //   res.send(result);
-    // });
-
     app.get("/bookmark", verifyJWT, async (req, res) => {
       const email = req.params.email;
       if (!email) {
@@ -244,22 +222,6 @@ async function run() {
       res.send(result);
     });
 
-    // app.get("/bookmark", verifyJWT, async (req, res) => {
-    //   const email = req.params.email;
-    //   if (!email) {
-    //     res.send([]);
-    //   }
-    //   const decodedEmail = req.decoded.email;
-    //   if (email !== decodedEmail) {
-    //     return res
-    //       .status(403)
-    //       .send({ error: true, message: "forbidden access" });
-    //   }
-    //   const query = { email: email };
-    //   const result = await bookMarkCollection.find(query).toArray();
-    //   res.send(result);
-    // });
-
     app.post("/mySelectedClasses", async (req, res) => {
       const newItem = req.body;
       const result = await bookMarkCollection.insertOne(newItem);
@@ -303,18 +265,6 @@ async function run() {
       res.send(result);
     });
 
-    // app.post("/class", verifyJWT, verifyIns, async (req, res) => {
-    //   const newItem = req.body;
-    //   const result = await classCollection.insertOne(newItem);
-    //   res.send(result);
-    // });
-
-    // app.delete("/class/:id", verifyJWT, verifyIns, async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await classCollection.deleteOne(query);
-    //   res.send(result);
-    // });
     // clinet Site instractor my added class route
     app.get("/myaddedclass", async (req, res) => {
       let query = {};
@@ -330,15 +280,6 @@ async function run() {
       const result = await classCollection.insertOne(newItem);
       res.send(result);
     });
-
-    // app.get("/addclasses/:email", verifyJWT, async (req, res) => {
-    //   const result = await classCollection
-    //     .find({
-    //       instructorEmail: req.params.email,
-    //     })
-    //     .toArray();
-    //   res.send(result);
-    // });
 
     app.delete("/myClasses/:id", verifyJWT, async (req, res) => {
       const id = req.params.id;
@@ -412,35 +353,6 @@ async function run() {
     });
 
     // ----------------------------------ADMIN END----------------------------------
-
-    // ============================
-
-    // =================================
-
-    // cart collection apis
-    // app.get("/class", async (req, res) => {
-    //   const cursor = await classCollection.find().toArray();
-    //   res.send(cursor);
-    // });
-    //=========================Selected Class added BOokmarks
-    // app.get("/bookmark/:email", verifyJWT, async (req, res) => {
-    //   const email = req.query.email;
-
-    //   if (!email) {
-    //     res.send([]);
-    //   }
-
-    //   const decodedEmail = req.decoded.email;
-    //   if (email !== decodedEmail) {
-    //     return res
-    //       .status(403)
-    //       .send({ error: true, message: "forbidden access" });
-    //   }
-
-    //   const query = { email: email };
-    //   const result = await bookMarkCollection.find(query).toArray();
-    //   res.send(result);
-    // });
 
     //===============Payment============
 
