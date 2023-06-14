@@ -1,9 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.PAYMENT_SECRET_KEY);
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -50,26 +50,12 @@ async function run() {
 
     // ----------------------------------COLLECTION----------------------------------
     const usersCollection = client.db("Pallikoodam").collection("users");
+    const insCollection = client.db("Pallikoodam").collection("instructors");
     const classCollection = client.db("Pallikoodam").collection("classes");
     const myClassCollection = client.db("Pallikoodam").collection("myclass");
     const bookMarkCollection = client.db("Pallikoodam").collection("bookMarks");
     const feedbackCollection = client.db("Pallikoodam").collection("feedback");
     const paymentCollection = client.db("Pallikoodam").collection("payments");
-
-    // const usersCollection = client.db("zone").collection("users");
-    // const allClassesCollection = client.db("zone").collection("allClasses");
-    // const myClassesCollection = client.db("zone").collection("myClasses");
-
-    // const mySelectedClassesCollection = client
-    //   .db("zone")
-    //   .collection("mySelectedClasses");
-
-    // const myEnrolledClassesCollection = client
-    //   .db("zone")
-    //   .collection("myEnrolledClasses");
-    // const enrolledStudentsCollection = client
-    //   .db("zone")
-    //   .collection("enrolledStudents");
 
     app.post("/jwt", (req, res) => {
       const user = req.body;
@@ -124,7 +110,7 @@ async function run() {
     });
 
     // security layer: verifyJWT
-    // email same
+
     // check admin
     app.get("/users/admin/:email", verifyJWT, async (req, res) => {
       const email = req.params.email;
@@ -312,6 +298,10 @@ async function run() {
       const result = await classCollection.find().toArray();
       res.send(result);
     });
+    app.get("/instructor", async (req, res) => {
+      const result = await insCollection.find().toArray();
+      res.send(result);
+    });
 
     // app.post("/class", verifyJWT, verifyIns, async (req, res) => {
     //   const newItem = req.body;
@@ -493,6 +483,22 @@ async function run() {
         },
       };
       const result = await bookMarkCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
+    ///========= Payment History
+
+    app.get("/payments", async (req, res) => {
+      const result = await paymentCollection.find().toArray();
+      res.send(result);
+    });
+
+    app.get("/payment/user", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const result = await paymentCollection.find(query).toArray();
       res.send(result);
     });
 
